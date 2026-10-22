@@ -1,43 +1,59 @@
 #include <iostream>
+#include <string>
+
 using namespace std;
 
+class Vehicle {
+protected:
+    string brand;
+    int year;
 
-class Animal // base class
-{
-private:
-    bool isAlive;
 public:
-    Animal(bool isAlive): isAlive(isAlive)  {}
-    void isLive(){
-        cout << "The animal is exists: " <<boolalpha<<isAlive<<endl;
-    }// creates function that shows that the animal is alive
+    Vehicle(const string& vehicleBrand, int vehicleYear)
+        : brand(vehicleBrand), year(vehicleYear) {}
+
+    void showVehicle() const {
+        cout << "Brand: " << brand << "\nYear: " << year << '\n';
+    }
 };
-class Mammal : public Animal
-{
-private:
-    bool hasHair;
-public:
-    Mammal(bool isAlive,bool hasHair) : Animal(isAlive), hasHair(hasHair) {}
-    void MammalStatus(){
-        cout << "Mammals has hair: " <<boolalpha<< hasHair<<endl;
-    }  
-};// create mammal class inheriting from Animal class
-class Person : public Mammal
-{
-private:
-    string name;
-public:
-    Person(bool isAlive,bool hasHair , string name) : Mammal(isAlive,hasHair), name(name){}
-    void existPerson(){
-        cout << "This persons name is: " << name<<endl;
-    }// this function returns a persons name
 
-};// create person class inheriting from mammal class
+class Car : public Vehicle {
+protected:
+    int numberOfDoors;
 
-int main(){
-    Person mugarura(true,true,"Allan");
-    mugarura.isLive();
-    mugarura.MammalStatus();
-    mugarura.existPerson();
+public:
+    Car(const string& carBrand, int carYear, int doors)
+        : Vehicle(carBrand, carYear), numberOfDoors(doors) {}
+
+    void showCar() const {
+        showVehicle(); // Inherited from Vehicle
+        cout << "Doors: " << numberOfDoors << '\n';
+    }
+};
+
+class ElectricCar : public Car {
+private:
+    int batteryCapacityKWh;
+
+public:
+    ElectricCar(const string& carBrand, int carYear, int doors, int capacity)
+        : Car(carBrand, carYear, doors), batteryCapacityKWh(capacity) {}
+
+    void showDetails() const {
+        showCar(); // Uses members inherited through Car and Vehicle
+        cout << "Battery capacity: " << batteryCapacityKWh << " kWh\n";
+    }
+
+    void charge() const { 
+        cout << brand << " is charging.\n";
+    }
+};
+
+int main() {
+    ElectricCar myCar("Mugarura", 2026, 4, 60);
+
+    cout << "Electric car details\n";
+    myCar.showDetails();
+    myCar.charge();
     return 0;
 }
